@@ -23,14 +23,15 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(m -> {
             m.
-                    requestMatchers("/", "/css/**", "/auth/**").permitAll()
+                    requestMatchers("/", "/css/**", "/auth/**","/file/**","/error").permitAll()
                     .requestMatchers("/posts").hasRole("USER")
+                    .requestMatchers("/admin").hasRole("ADMIN")
                     .anyRequest().authenticated();
         });
         http.userDetailsService(customUserDetailsService);
         http.formLogin(m -> {
             m.loginPage("/auth/login")
-                    .defaultSuccessUrl("/posts")
+                    .defaultSuccessUrl("/")
                     .failureHandler((request, response, e) -> {
                         response.sendRedirect("/auth/login?error=true");
                     });

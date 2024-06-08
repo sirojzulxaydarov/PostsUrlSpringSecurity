@@ -39,9 +39,18 @@ public class Runner implements CommandLineRunner {
                     .age(18)
                     .firstName("Ahmad")
                     .lastName("Kumar")
-                    .roles(List.of(role1,role2))
+                    .roles(List.of(role1))
+                    .build();
+            User user2 = User.builder()
+                    .email("b@gmail.com")
+                    .password(passwordEncoder.encode("321"))
+                    .age(18)
+                    .firstName("Ahmad")
+                    .lastName("Sinx")
+                    .roles(List.of(role2))
                     .build();
             userRepository.save(user);
+            userRepository.save(user2);
         }
 
     }

@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+           .aylana{
+               border-radius: 50%;
+           }
+    </style>
 </head>
 <body>
-<h1>home page</h1>
+<div class="bg-dark">
+    <div class="container">
+        <div class="row text-white">
+            <div class="col-1">
+                <h1>Logo</h1>
+            </div>
+            <div class="offset-5"></div>
+            <div class="col-6">
+                <ul class="list-unstyled d-flex">
+
+                    <a href="/admin">
+                        <li sec:authorize="hasRole('ADMIN')" class="text-white mx-1">Admin</li>
+                    </a>
+
+                    <a href="/posts">
+                        <li sec:authorize="hasRole('USER')" class="text-white mx-1">User</li>
+                    </a>
+
+                    <a href="/auth/login">
+                        <li sec:authorize="isAnonymous" class="text-white mx-1">Login</li>
+                    </a>
+
+                    <a href="/auth/register">
+                        <li sec:authorize="isAnonymous" class="text-white mx-1">Register</li>
+                    </a>
+
+                    <a href="auth/logout">
+                        <li sec:authorize="isAuthenticated" class="text-white mx-1">Logout</li>
+                    </a>
+
+                    <li sec:authorize="isAuthenticated" class="text-white mx-1">
+                        <span th:text="${#authentication.principal.firstName+' '+#authentication.principal.lastName}"></span>
+                        <img class="aylana" width="50" height="50" th:src="|/file/${#authentication.principal.id}|" alt="">
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
