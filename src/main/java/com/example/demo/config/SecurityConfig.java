@@ -3,13 +3,14 @@ package com.example.demo.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,14 +23,17 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(m -> {
             m.
-                    requestMatchers("/","/css/**","/auth/**").permitAll()
+                    requestMatchers("/", "/css/**", "/auth/**").permitAll()
                     .requestMatchers("/posts").hasRole("USER")
                     .anyRequest().authenticated();
         });
         http.userDetailsService(customUserDetailsService);
         http.formLogin(m -> {
             m.loginPage("/auth/login")
-                    .defaultSuccessUrl("/posts");
+                    .defaultSuccessUrl("/posts")
+                    .failureHandler((request, response, e) -> {
+                        response.sendRedirect("/auth/login?error=true");
+                    });
 
         });
         http.logout(m -> {
